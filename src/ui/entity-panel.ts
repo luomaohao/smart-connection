@@ -107,85 +107,119 @@ export class EntityPanelView extends ItemView {
 	 */
 	private renderEntity(container: HTMLElement, entity: Entity): void {
 		const entityEl = container.createEl('div', { cls: 'smart-connection-entity' });
-		
-		// Entity name
-		const nameEl = entityEl.createEl('div', { cls: 'smart-connection-entity-name' });
-		nameEl.createEl('span', { 
+
+		// Entity header with name and actions
+		const headerEl = entityEl.createEl('div', { cls: 'smart-connection-entity-header' });
+
+		// Entity name with click-to-copy functionality
+		const nameEl = headerEl.createEl('div', { cls: 'smart-connection-entity-name' });
+		const nameTextEl = nameEl.createEl('span', {
 			text: entity.name,
 			cls: 'smart-connection-entity-text'
 		});
-		
-		// Occurrence count
-		nameEl.createEl('span', {
-			text: `${entity.occurrences.length}`,
-			cls: 'smart-connection-entity-count'
+
+		// Add copy functionality
+		nameTextEl.addEventListener('click', () => {
+			navigator.clipboard.writeText(entity.name).then(() => {
+				// Show temporary success indicator
+				const originalText = nameTextEl.textContent;
+				nameTextEl.textContent = '✓ 已复制';
+				setTimeout(() => {
+					nameTextEl.textContent = originalText;
+				}, 1000);
+			});
 		});
-		
+
+		// Stats section
+		const statsEl = headerEl.createEl('div', { cls: 'smart-connection-entity-stats' });
+
+		// Occurrence count with icon
+		const occurrenceEl = statsEl.createEl('span', {
+			cls: 'smart-connection-entity-occurrence'
+		});
+		occurrenceEl.createEl('span', { text: '📝' });
+		occurrenceEl.createEl('span', { text: `${entity.occurrences.length}` });
+
+		// File count with icon
+		const filesEl = statsEl.createEl('span', {
+			cls: 'smart-connection-entity-files'
+		});
+		filesEl.createEl('span', { text: '📁' });
+		filesEl.createEl('span', { text: `${entity.relatedFiles.size}` });
+
 		// Get connections
 		const connections = this.indexManager.getConnectionsForEntity(entity.normalizedName);
-		
+
 		if (connections.length > 0) {
-			// Connections section
-			const connectionsEl = entityEl.createEl('div', { 
-				cls: 'smart-connection-connections' 
+			// Connections section with strength visualization
+			const connectionsEl = entityEl.createEl('div', {
+				cls: 'smart-connection-connections'
 			});
-			
-			connectionsEl.createEl('div', {
-				text: '相关实体:',
+
+			const connectionsHeader = connectionsEl.createEl('div', {
+				cls: 'smart-connection-connections-header'
+			});
+			connectionsHeader.createEl('span', {
+				text: '相关实体',
 				cls: 'smart-connection-connections-label'
 			});
-			
+			connectionsHeader.createEl('span', {
+				text: `${connections.length} 个`,
+				cls: 'smart-connection-connections-count'
+			});
+
 			const connectionsList = connectionsEl.createEl('div', {
 				cls: 'smart-connection-connections-list'
 			});
-			
+
 			// Show top 5 connections
 			const topConnections = connections.slice(0, 5);
-			
+
 			for (const connection of topConnections) {
 				const relatedEntityName = connection.entity1 === entity.normalizedName
 					? connection.entity2
 					: connection.entity1;
-				
+
 				const relatedEntity = this.indexManager.getEntity(relatedEntityName);
-				
+
 				if (relatedEntity) {
 					const connEl = connectionsList.createEl('div', {
 						cls: 'smart-connection-connection-item'
 					});
-					
+
+					// Strength indicator
+					const strengthBar = connEl.createEl('div', {
+						cls: 'smart-connection-strength-bar'
+					});
+					const strengthFill = strengthBar.createEl('div', {
+						cls: 'smart-connection-strength-fill'
+					});
+					strengthFill.style.width = `${Math.round(connection.strength * 100)}%`;
+
 					const linkEl = connEl.createEl('a', {
 						text: relatedEntity.name,
 						cls: 'smart-connection-connection-link'
 					});
-					
+
 					linkEl.addEventListener('click', (e) => {
 						e.preventDefault();
 						this.navigateToEntity(relatedEntity);
 					});
-					
+
 					connEl.createEl('span', {
-						text: `(${Math.round(connection.strength * 100)}%)`,
+						text: `${Math.round(connection.strength * 100)}%`,
 						cls: 'smart-connection-connection-strength'
 					});
 				}
 			}
-			
+
 			if (connections.length > 5) {
-				connectionsList.createEl('div', {
-					text: `还有 ${connections.length - 5} 个相关实体...`,
+				const moreEl = connectionsList.createEl('div', {
 					cls: 'smart-connection-more'
 				});
+				moreEl.createEl('span', { text: '⋯' });
+				moreEl.createEl('span', { text: `还有 ${connections.length - 5} 个相关实体` });
 			}
-		}
-		
-		// Related files
-		const filesCount = entity.relatedFiles.size;
-		if (filesCount > 1) {
-			entityEl.createEl('div', {
-				text: `出现在 ${filesCount} 个笔记中`,
-				cls: 'smart-connection-files-count'
-			});
 		}
 	}
 	

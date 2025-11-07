@@ -20,14 +20,31 @@ export function calculateSimilarity(text1: string, text2: string): number {
 }
 
 /**
- * Tokenize text into words
+ * Tokenize text into words (Chinese only)
  */
-export function tokenize(text: string): string[] {
-	return text
-		.toLowerCase()
-		.replace(/[^\w\s]/g, ' ')
-		.split(/\s+/)
-		.filter(word => word.length > 2);
+export function tokenize(text: string, mode: 'mixed' | 'chinese_only' | 'english_only' = 'mixed'): string[] {
+	const normalized = text.toLowerCase();
+	let tokens: string[] = [];
+
+	switch (mode) {
+		case 'chinese_only':
+			// Extract Chinese characters only and split them individually
+			tokens = (normalized.match(/[\u4e00-\u9fff]/g) || []);
+			break;
+		case 'english_only':
+			// Standard English tokenization
+			tokens = normalized.replace(/[^\w\s]/g, ' ').split(/\s+/);
+			break;
+		case 'mixed':
+		default:
+			// Combined tokenization
+			tokens = normalized
+				.replace(/[^\w\s\u4e00-\u9fff]/g, ' ')
+				.split(/(\s+|(?=[\u4e00-\u9fff])|(?<=[\u4e00-\u9fff]))/);
+			break;
+	}
+
+	return tokens.map(t => t.trim()).filter(t => t.length > 0);
 }
 
 /**
