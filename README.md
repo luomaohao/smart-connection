@@ -1,94 +1,244 @@
-# Obsidian Sample Plugin
+# Smart Connection - 智能概念关联插件
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+这是一个 Obsidian 插件，能够自动识别笔记中的概念实体，并智能地建立它们之间的关联关系，帮助你构建强大的知识网络。
 
-This project uses TypeScript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in TypeScript Definition format, which contains TSDoc comments describing what it does.
+## 功能特性
 
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open Sample Modal" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and output 'click' to the console.
-- Registers a global interval which logs 'setInterval' to the console.
+### 🎯 自动实体识别
+- 使用可配置的正则表达式模式自动提取概念实体
+- 支持识别：
+  - 首字母大写的词组（如 "Machine Learning", "JavaScript"）
+  - 缩写词（如 "API", "HTTP", "REST"）
+  - 驼峰命名（如 "TypeScript", "GraphQL"）
+- 可自定义排除模式，过滤常见词汇
+- 可配置实体长度范围
 
-## First time developing plugins?
+### 🔗 智能实体关联
+- 基于共现关系自动计算实体之间的关联强度
+- 使用 Jaccard 相似度和共现频率的混合算法
+- 识别跨笔记的实体关系
+- 提供可调节的相似度阈值
 
-Quick starting guide for new plugin devs:
+### 🤖 自动链接功能
+- 可选的自动链接模式（默认关闭，确保安全）
+- 智能选择最佳链接目标
+- 避免重复链接
+- 支持仅链接已存在的笔记
 
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
-- Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
+### 📊 实体面板
+- 侧边栏显示当前笔记中的所有实体
+- 显示实体出现次数
+- 展示相关实体及关联强度
+- 一键跳转到相关笔记
 
-## Releasing new releases
+### 🛠️ 强大的命令
+- **重建实体索引**: 重新扫描所有笔记
+- **显示实体面板**: 打开/关闭实体面板
+- **显示链接建议**: 查看当前笔记的链接建议
+- **自动链接实体**: 为当前笔记自动添加链接
+- **显示实体统计**: 查看知识库的实体统计信息
 
-- Update your `manifest.json` with your new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
-- Update your `versions.json` file with `"new-plugin-version": "minimum-obsidian-version"` so older versions of Obsidian can download an older version of your plugin that's compatible.
-- Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`. See here for an example: https://github.com/obsidianmd/obsidian-sample-plugin/releases
-- Upload the files `manifest.json`, `main.js`, `styles.css` as binary attachments. Note: The manifest.json file must be in two places, first the root path of your repository and also in the release.
-- Publish the release.
+## 安装
 
-> You can simplify the version bump process by running `npm version patch`, `npm version minor` or `npm version major` after updating `minAppVersion` manually in `manifest.json`.
-> The command will bump version in `manifest.json` and `package.json`, and add the entry for the new version to `versions.json`
+### 从 Obsidian 社区插件安装（推荐）
+1. 打开 Obsidian 设置
+2. 进入 **社区插件** → **浏览**
+3. 搜索 "Smart Connection"
+4. 点击安装并启用
 
-## Adding your plugin to the community plugin list
+### 手动安装
+1. 下载最新的 release 文件
+2. 将 `main.js`、`manifest.json` 和 `styles.css` 复制到你的 vault 的 `.obsidian/plugins/smart-connection/` 目录
+3. 重新加载 Obsidian
+4. 在设置中启用插件
 
-- Check the [plugin guidelines](https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines).
-- Publish an initial version.
-- Make sure you have a `README.md` file in the root of your repo.
-- Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
+## 使用方法
 
-## How to use
+### 首次使用
+1. 安装并启用插件后，它会自动扫描你的所有笔记并构建实体索引
+2. 点击侧边栏的网络图标打开实体面板
+3. 在设置中根据你的需求调整配置
 
-- Clone this repo.
-- Make sure your NodeJS is at least v16 (`node --version`).
-- `npm i` or `yarn` to install dependencies.
-- `npm run dev` to start compilation in watch mode.
+### 查看实体
+- 打开任何笔记，实体面板会自动显示该笔记中识别的所有实体
+- 点击相关实体可以跳转到包含该实体的其他笔记
 
-## Manually installing the plugin
+### 获取链接建议
+1. 打开要添加链接的笔记
+2. 使用命令面板（Cmd/Ctrl + P）
+3. 运行 "显示链接建议" 命令
+4. 查看系统推荐的实体链接
 
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
+### 自动链接（谨慎使用）
+1. 在设置中启用 "启用自动链接"
+2. 打开笔记并运行 "自动链接实体" 命令
+3. 系统会自动为识别的实体添加链接
 
-## Improve code quality with eslint (optional)
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code. 
-- To use eslint with this project, make sure to install eslint from terminal:
-  - `npm install -g eslint`
-- To use eslint to analyze this project use this command:
-  - `eslint main.ts`
-  - eslint will then create a report with suggestions for code improvement by file and line number.
-- If your source code is in a folder, such as `src`, you can use eslint with this command to analyze all files in that folder:
-  - `eslint ./src/`
+> ⚠️ **注意**: 自动链接会修改笔记内容，建议先备份或使用版本控制。
 
-## Funding URL
+## 配置选项
 
-You can include funding URLs where people who use your plugin can financially support it.
+### 实体提取设置
+- **启用自动实体提取**: 开关实体识别功能
+- **最小实体长度**: 提取的实体最少字符数（默认: 2）
+- **最大实体长度**: 提取的实体最多字符数（默认: 50）
+- **实体模式**: 用于识别实体的正则表达式（高级）
+- **排除模式**: 用于过滤常见词的正则表达式（高级）
 
-The simple way is to set the `fundingUrl` field to your link in your `manifest.json` file:
+### 链接设置
+- **启用自动链接**: 是否允许自动添加链接（默认: 关闭）
+- **仅链接已存在的笔记**: 只为已有对应笔记的实体创建链接（推荐）
+- **最小相似度阈值**: 实体关联的最小相似度，范围 0-1（默认: 0.3）
+- **每个笔记最大建议数**: 限制显示的链接建议数量（默认: 10）
 
-```json
-{
-    "fundingUrl": "https://buymeacoffee.com"
-}
+### 显示设置
+- **显示实体面板**: 是否在侧边栏显示实体面板
+- **高亮显示实体**: 在编辑器中高亮已识别的实体（实验性）
+
+### 高级设置
+- **索引更新延迟**: 文件修改后多久更新索引（毫秒）
+- **启用缓存**: 缓存实体索引以提高性能
+
+## 工作原理
+
+### 实体提取
+插件使用正则表达式模式扫描笔记内容，识别潜在的概念实体。默认配置可以识别：
+- 专有名词（首字母大写）
+- 技术术语（缩写词）
+- 复合概念（驼峰命名）
+
+### 关联计算
+插件使用两种算法计算实体之间的关联强度：
+
+1. **Jaccard 相似度**（权重 40%）:
+   ```
+   J(A,B) = |A ∩ B| / |A ∪ B|
+   ```
+   其中 A 和 B 是包含实体的文件集合
+
+2. **共现得分**（权重 60%）:
+   ```
+   Co(A,B) = |共同出现的文件| / max(|A的文件|, |B的文件|)
+   ```
+
+最终关联强度 = 0.4 × Jaccard + 0.6 × 共现得分
+
+### 实时索引更新
+- 创建新文件时自动索引
+- 修改文件时增量更新
+- 删除文件时清理索引
+- 支持防抖动以提高性能
+
+## 性能优化建议
+
+- 对于大型知识库（1000+ 笔记），建议增加索引更新延迟
+- 启用缓存可以显著提高性能
+- 定期使用"重建索引"命令清理过期数据
+- 调整相似度阈值可以减少不相关的关联
+
+## 隐私和安全
+
+- ✅ 所有处理完全在本地进行，不发送任何数据到外部服务器
+- ✅ 不收集用户数据或使用统计
+- ✅ 不执行远程代码
+- ✅ 开源代码，可审计
+
+## 开发
+
+### 环境要求
+- Node.js 18+
+- npm
+
+### 本地开发
+```bash
+# 克隆仓库
+git clone https://github.com/your-repo/smart-connection.git
+cd smart-connection
+
+# 安装依赖
+npm install
+
+# 开发模式（自动重新编译）
+npm run dev
+
+# 生产构建
+npm run build
 ```
 
-If you have multiple URLs, you can also do:
-
-```json
-{
-    "fundingUrl": {
-        "Buy Me a Coffee": "https://buymeacoffee.com",
-        "GitHub Sponsor": "https://github.com/sponsors",
-        "Patreon": "https://www.patreon.com/"
-    }
-}
+### 项目结构
+```
+smart-connection/
+├── src/
+│   ├── main.ts              # 插件入口
+│   ├── settings.ts          # 设置定义
+│   ├── core/                # 核心功能
+│   │   ├── entity-extractor.ts   # 实体提取器
+│   │   ├── entity-index.ts       # 实体索引管理
+│   │   └── entity-linker.ts      # 实体链接器
+│   ├── ui/                  # UI 组件
+│   │   ├── entity-panel.ts       # 实体面板
+│   │   └── settings-tab.ts       # 设置页面
+│   └── utils/               # 工具函数
+│       └── text-utils.ts         # 文本处理工具
+├── main.ts                  # 入口文件
+├── manifest.json            # 插件清单
+├── styles.css              # 样式文件
+└── package.json            # 项目配置
 ```
 
-## API Documentation
+## 常见问题
 
-See https://github.com/obsidianmd/obsidian-api
+### 为什么某些概念没有被识别？
+检查以下设置：
+- 实体长度是否在配置的范围内
+- 是否匹配实体模式
+- 是否被排除模式过滤
+
+### 如何调整识别的准确性？
+- 修改 "最小相似度阈值" 来控制关联的严格程度
+- 自定义实体模式和排除模式
+- 调整实体长度范围
+
+### 自动链接安全吗？
+自动链接功能默认关闭。启用前建议：
+- 先在测试笔记上试用
+- 启用版本控制（如 Git）
+- 定期备份
+- 开启 "仅链接已存在的笔记" 选项
+
+### 性能问题？
+对于大型知识库：
+- 增加索引更新延迟（例如 2000-3000ms）
+- 启用缓存
+- 减少每个笔记的最大建议数
+
+## 贡献
+
+欢迎贡献！请查看 [CONTRIBUTING.md](CONTRIBUTING.md) 了解详情。
+
+## 许可证
+
+MIT License - 详见 [LICENSE](LICENSE) 文件
+
+## 致谢
+
+感谢 Obsidian 社区的支持和反馈！
+
+## 更新日志
+
+### v1.0.0 (2025-01-01)
+- 🎉 首次发布
+- ✨ 自动实体识别
+- ✨ 智能关联算法
+- ✨ 实体面板
+- ✨ 自动链接功能
+- ✨ 丰富的配置选项
+
+## 联系方式
+
+- 问题反馈: [GitHub Issues](https://github.com/your-repo/smart-connection/issues)
+- 功能建议: [GitHub Discussions](https://github.com/your-repo/smart-connection/discussions)
+
+---
+
+如果这个插件对你有帮助，请给个 ⭐️ Star！

@@ -1,11 +1,10 @@
 {
-	"id": "sample-plugin",
-	"name": "Sample Plugin",
+	"id": "smart-connection",
+	"name": "Smart Connection",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
+	"description": "自动识别并关联笔记中的概念实体，帮助你构建知识网络",
+	"author": "Smart Connection Team",
+	"authorUrl": "",
 	"isDesktopOnly": false
 }

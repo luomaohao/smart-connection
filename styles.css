@@ -1,8 +1,159 @@
-/*
+/* Smart Connection Plugin Styles */
 
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
+/* Entity Panel */
+.smart-connection-panel {
+	padding: 10px;
+	height: 100%;
+	overflow-y: auto;
+}
 
-If your plugin does not need CSS, delete this file.
+.smart-connection-empty {
+	padding: 20px;
+	text-align: center;
+	color: var(--text-muted);
+	font-size: 0.9em;
+}
 
-*/
+.smart-connection-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 15px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.smart-connection-header h4 {
+	margin: 0;
+	font-size: 1.1em;
+	font-weight: 600;
+}
+
+.smart-connection-count {
+	color: var(--text-muted);
+	font-size: 0.85em;
+	background: var(--background-modifier-border);
+	padding: 2px 8px;
+	border-radius: 10px;
+}
+
+/* Entity List */
+.smart-connection-list {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.smart-connection-entity {
+	padding: 10px;
+	background: var(--background-secondary);
+	border-radius: 6px;
+	border: 1px solid var(--background-modifier-border);
+	transition: all 0.2s ease;
+}
+
+.smart-connection-entity:hover {
+	background: var(--background-secondary-alt);
+	border-color: var(--interactive-accent);
+}
+
+.smart-connection-entity-name {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 8px;
+}
+
+.smart-connection-entity-text {
+	font-weight: 500;
+	color: var(--text-normal);
+	font-size: 0.95em;
+}
+
+.smart-connection-entity-count {
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
+	padding: 2px 6px;
+	border-radius: 8px;
+	font-size: 0.75em;
+	font-weight: 600;
+}
+
+/* Connections */
+.smart-connection-connections {
+	margin-top: 8px;
+	padding-top: 8px;
+	border-top: 1px solid var(--background-modifier-border);
+}
+
+.smart-connection-connections-label {
+	font-size: 0.8em;
+	color: var(--text-muted);
+	margin-bottom: 5px;
+	font-weight: 500;
+}
+
+.smart-connection-connections-list {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.smart-connection-connection-item {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 0.85em;
+	padding: 2px 0;
+}
+
+.smart-connection-connection-link {
+	color: var(--link-color);
+	text-decoration: none;
+	cursor: pointer;
+	transition: color 0.2s ease;
+}
+
+.smart-connection-connection-link:hover {
+	color: var(--link-color-hover);
+	text-decoration: underline;
+}
+
+.smart-connection-connection-strength {
+	color: var(--text-muted);
+	font-size: 0.9em;
+}
+
+.smart-connection-files-count {
+	margin-top: 6px;
+	font-size: 0.75em;
+	color: var(--text-faint);
+}
+
+.smart-connection-more {
+	font-size: 0.8em;
+	color: var(--text-muted);
+	font-style: italic;
+	margin-top: 4px;
+}
+
+/* Entity highlighting (when enabled) */
+.smart-connection-highlight {
+	background-color: var(--text-selection);
+	padding: 1px 3px;
+	border-radius: 3px;
+	transition: background-color 0.2s ease;
+}
+
+.smart-connection-highlight:hover {
+	background-color: var(--interactive-accent);
+	color: var(--text-on-accent);
+}
+
+/* Settings page specific styles */
+.setting-item-description code {
+	font-size: 0.9em;
+	padding: 2px 4px;
+	background: var(--background-modifier-border);
+	border-radius: 3px;
+}
